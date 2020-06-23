@@ -63,7 +63,11 @@ class CaloriesCalculator(Calculator):
         if result > 0:
             return f'Сегодня можно съесть что-нибудь ещё, но с общей калорийностью не более {result} кКал'
         
+<<<<<<< HEAD
         return 'Хватит есть!'
 
 if __name__ == '__main__':
     pass
+=======
+        return 'Хватит есть!'
+>>>>>>> 735abdb7f967dedcdd50b9a2bd129189c2925771
