@@ -64,3 +64,6 @@ class CaloriesCalculator(Calculator):
             return f'Сегодня можно съесть что-нибудь ещё, но с общей калорийностью не более {result} кКал'
         
         return 'Хватит есть!'
+
+if __name__ == '__main__':
+    pass
