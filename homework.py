@@ -50,11 +50,12 @@ class CashCalculator(Calculator):
             'eur': (self.EURO_RATE, ' Euro')
         }
 
-        if currency not in convert.keys():
+        if currency not in convert:
             raise ValueError('Неверная валюта, должна быть rub, usd или eur')
 
-        number = abs(round(remains / convert[currency][0], 2))
-        result = str(number) + convert[currency][1]
+        currency_rate, currency_name = convert[currency]
+        number = abs(round(remains / currency_rate, 2))
+        result = str(number) + currency_name
 
         if remains > 0:
             return f'На сегодня осталось {result}'
