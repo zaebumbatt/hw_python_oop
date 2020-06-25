@@ -21,13 +21,13 @@ class Calculator:
 
     def get_today_stats(self):
         date = dt.date.today()
-        return sum([i.amount for i in self.records if i.date == date])
+        return sum(i.amount for i in self.records if i.date == date)
 
     def get_week_stats(self):
         date = dt.date.today()
         date_week_ago = dt.date.today() - dt.timedelta(days=7)
-        return sum([i.amount for i in self.records
-                    if date_week_ago <= i.date <= date])
+        return sum(i.amount for i in self.records
+                   if date_week_ago <= i.date <= date)
 
     def remaining(self):
         remaining = self.limit - self.get_today_stats()
@@ -42,24 +42,32 @@ class CashCalculator(Calculator):
         remains = self.remaining()
 
         if remains == 0:
-            return f'Денег нет, держись'
+            return 'Денег нет, держись'
 
-        result = {
-            'rub': str(abs(remains)) + ' руб',
-            'usd': str(abs(round(remains/self.USD_RATE, 2))) + ' USD',
-            'eur': str(abs(round(remains/self.EURO_RATE, 2))) + ' Euro'
+        convert = {
+            'rub': (1, ' руб'),
+            'usd': (self.USD_RATE, ' USD'),
+            'eur': (self.EURO_RATE, ' Euro')
         }
 
-        if remains > 0:
-            return f'На сегодня осталось {result[currency]}'
+        if currency not in convert.keys():
+            raise ValueError('Неверная валюта, должна быть rub, usd или eur')
 
-        return f'Денег нет, держись: твой долг - {result[currency]}'
+        number = abs(round(remains / convert[currency][0], 2))
+        result = str(number) + convert[currency][1]
+
+        if remains > 0:
+            return f'На сегодня осталось {result}'
+
+        return f'Денег нет, держись: твой долг - {result}'
 
 
 class CaloriesCalculator(Calculator):
     def get_calories_remained(self):
-        if self.remaining() > 0:
-            return f'Сегодня можно съесть что-нибудь ещё, ' + \
-                   f'но с общей калорийностью не более {self.remaining()} кКал'
+        remains = self.remaining()
+
+        if remains > 0:
+            return ('Сегодня можно съесть что-нибудь ещё, ' +
+                    f'но с общей калорийностью не более {remains} кКал')
 
         return 'Хватит есть!'
